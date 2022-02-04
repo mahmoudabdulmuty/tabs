@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
+import { FaAngleDoubleRight } from 'react-icons/fa';
 import Error from './components/Error/';
 import Loading from './components/Loading/';
-// import { FaAngleDoubleRight } from 'react-icons/fa';
 
 function App() {
 	const [loading, setLoading] = useState(true);
@@ -11,11 +11,11 @@ function App() {
 
 	const getJobs = async () => {
 		try {
-			setLoading(false);
 			const res = await fetch('https://course-api.com/react-tabs-project');
-			if (!res.ok) throw new Error(res.statusText);
 			const jobs = await res.json();
 			setJobs(jobs);
+			setLoading(false);
+			if (!res.ok) throw new Error(res.statusText);
 		} catch (err) {
 			setLoading(false);
 			setError("can't fetch data");
@@ -26,12 +26,50 @@ function App() {
 		getJobs();
 	}, []);
 
+	if (loading) {
+		return <Loading />;
+	}
+
+	if (error) {
+		return <Error />;
+	}
+
+	const { title, dates, duties, company, id } = jobs[value];
+
 	return (
-		<>
-			{loading && <Loading />}
-			{error && <Error error={error} />}
-			{jobs.length > 0 && jobs.map((job) => <h1 key={job.id}>{job.title}</h1>)}
-		</>
+		<section className="section">
+			<div className="title">
+				<h2>experience</h2>
+				<div className="underline"></div>
+			</div>
+			<div className="jobs-center">
+				<div className="btn-container">
+					{jobs.map((job, index) => {
+						return (
+							<button
+								className={`job-btn ${index === value && 'active-btn'}`}
+								onClick={() => setValue(index)}
+								key={job.id}
+							>
+								{job.company}
+							</button>
+						);
+					})}
+				</div>
+				<article className="jobs-info">
+					<h3>{title}</h3>
+					<h4>{company}</h4>
+					{duties.map((duty, index) => {
+						return (
+							<div key={index} className="job-desc">
+								<FaAngleDoubleRight className="job-icon" />
+								<p>{duty}</p>
+							</div>
+						);
+					})}
+				</article>
+			</div>
+		</section>
 	);
 }
 

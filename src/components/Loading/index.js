@@ -1,5 +1,10 @@
+import './index.css';
 function index() {
-	return <h2>Loading ...</h2>;
+	return (
+		<section className="section loading">
+			<h1>Loading ...</h1>
+		</section>
+	);
 }
 
 export default index;
