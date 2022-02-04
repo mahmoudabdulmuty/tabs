@@ -34,7 +34,7 @@ function App() {
 		return <Error />;
 	}
 
-	const { title, dates, duties, company, id } = jobs[value];
+	const { title, duties, company } = jobs[value];
 
 	return (
 		<section className="section">
